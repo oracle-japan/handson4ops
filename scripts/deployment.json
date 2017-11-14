@@ -1,0 +1,17 @@
+{
+    "memory": "2G",
+    "instances": "2",  
+	"environment": {
+        "DBAAS_DEFAULT_CONNECT_DESCRIPTOR":"140.86.34.212:1521/PDB1.gse00002265.oraclecloud.internal",
+        "DBAAS_USER_NAME":"oracleusr",
+        "DBAAS_USER_PASSWORD":"oracle"
+
+    },
+    "services": [{
+        "identifier": "DBService",
+        "type": "DBAAS",
+        "name": "db12c-ee",
+        "username": "oracleusr",
+        "password": "oracle"
+    }]
+}
