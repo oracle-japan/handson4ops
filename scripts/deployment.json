@@ -1,7 +1,7 @@
 {
-    "memory": "2G",
-    "instances": "2",  
-	"environment": {
+    "memory": "1G",
+    "instances": "1",
+    "environment": {
         "DBAAS_DEFAULT_CONNECT_DESCRIPTOR":"140.86.34.212:1521/PDB1.gse00002265.oraclecloud.internal",
         "DBAAS_USER_NAME":"oracleusr",
         "DBAAS_USER_PASSWORD":"oracle"
