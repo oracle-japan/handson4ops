@@ -7,6 +7,10 @@ IDENTITY_DOMAIN="gse00002265"
 REGION="emea"
 OUTPUT_FORMAT="short"
 
+#storage containerのパラメータ
+REST_URL=https://em2.storage.oraclecloud.com  #storage cloudのURL
+STORAGE_CONTAINER=FirstDemoContainer #archiveを格納するstorage container名
+
 echo "deploy.sh を開始します..."
 
 JOB_STATUS_RUNNING="RUNNING" #ジョブの状態
@@ -15,9 +19,6 @@ APP_NAME="EmployeeWebApp" #アプリケーションの名称
 
 APP_ARCHIVE_NAME="EmployeeRESTApp-1.0-dist.zip"  #archive名称
 APP_ARCHIVE_PATH="../target/EmployeeRESTApp-1.0-dist.zip"  #archiveの格納場所（DevCS）
-
-STORAGE_CONTAINER=FirstDemoContainer #archiveを格納するstorage container名
-REST_URL=https://em2.storage.oraclecloud.com  #storage cloudのURL
 
 if [ -e $APP_ARCHIVE_PATH ]; then
     # 存在する場合
@@ -59,7 +60,7 @@ echo "アプリケーション: " $APP_NAME "の存在チェックを実行し�
 psm accs app -n $APP_NAME -of short
 app_status=$(psm accs app -n $APP_NAME -of short | grep 'Status:' | awk '{print $2}')
 
-echo app_status:$app_status 
+echo app_status:$app_status
 
 if [ -n "$app_status" ]; then
   echo "アプリケーション: " $APP_NAME "が既に存在しています。"
@@ -71,7 +72,7 @@ fi
 echo "アプリケーション: " $APP_NAME "のデプロイを実行します..."
 accs_push_jobid=$(psm accs push -n $APP_NAME -r java -s monthly -d deployment.json -u $STORAGE_CONTAINER/$APP_ARCHIVE_NAME -of short | grep 'Job ID:' | awk '{print $3}')
 
-echo accs_push_jobid:$accs_push_jobid 
+echo accs_push_jobid:$accs_push_jobid
 
 accs_push_status=$JOB_STATUS_RUNNING
 while [ "$accs_push_status" == "$JOB_STATUS_RUNNING" ]
