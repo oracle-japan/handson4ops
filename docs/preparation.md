@@ -33,7 +33,7 @@
 
   - Wiki Markup: MARKDOWN
   - Initial Repository: Import existing repositoryを選択
-  - Repository URL: https://github.com/shtfresh/devcs_demo.git
+  - Repository URL: https://github.com/oracle-japan/handson4ops-sampleapp.git
 
 ![](./img/create devcs 6.PNG)
 
@@ -57,7 +57,7 @@
 
   DB接続設定画面で以下の値を入力します。
 
-  - 接続名:DEVCS_DBCS 
+  - 接続名:DEVCS_DBCS
   - ユーザ名: SYS
   - パスワード: Pa55_word（作成したDBCSの管理者パスワード）
 
