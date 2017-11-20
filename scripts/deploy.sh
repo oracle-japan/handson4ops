@@ -8,7 +8,9 @@ REGION="emea"
 OUTPUT_FORMAT="short"
 
 #storage containerのパラメータ
-REST_URL=https://em2.storage.oraclecloud.com  #storage cloudのURL
+REST_ENDPOINT=https://Storage-gse00002265.storage.oraclecloud.com/v1/Storage-gse00002265
+AUTHV1_ENDPOINT=https://Storage-gse00002265.storage.oraclecloud.com/auth/v1.0
+
 STORAGE_CONTAINER=FirstDemoContainer #archiveを格納するstorage container名
 
 echo "deploy.sh を開始します..."
@@ -22,32 +24,32 @@ APP_ARCHIVE_PATH="../target/EmployeeRESTApp-1.0-dist.zip"  #archiveの格納場�
 
 if [ -e $APP_ARCHIVE_PATH ]; then
     # 存在する場合
-	echo $APP_ARCHIVE_PATH "が存在しています。"
+    echo $APP_ARCHIVE_PATH "が存在しています。"
 else
     # 存在しない場合
-	echo $APP_ARCHIVE_PATH "が存在していません。処理を終了します。"
-	exit 0
+    echo $APP_ARCHIVE_PATH "が存在していません。処理を終了します。"
+    exit 0
 fi
 
 echo APP_NAME:$APP_NAME
 
 #storage cloud token取得
-token=`curl -v -s -X GET -H "X-Storage-User: Storage-$IDENTITY_DOMAIN:$USERNAME" -H "X-Storage-Pass: $PASSWORD" $REST_URL/auth/v1.0 |& grep X-Auth-Token | awk -F' ' '{print $3}'`
+token=`curl -v -s -X GET -H "X-Storage-User: Storage-$IDENTITY_DOMAIN:$USERNAME" -H "X-Storage-Pass: $PASSWORD" $AUTHV1_ENDPOINT |& grep X-Auth-Token | awk -F' ' '{print $3}'`
 
 #container作成
 echo "containerを作成します..."
 curl -v -X PUT \
      -H "X-Auth-Token: $token" \
-     $REST_URL/v1/Storage-$IDENTITY_DOMAIN/$STORAGE_CONTAINER
+     $REST_ENDPOINT/$STORAGE_CONTAINER
 
-	 
+
 #archiveをアップロードする
 echo "archiveをアップロードします..."
 curl -v -X PUT \
      -H "X-Auth-Token: $token" \
      -T $APP_ARCHIVE_PATH \
-     $REST_URL/v1/Storage-$IDENTITY_DOMAIN/$STORAGE_CONTAINER/$APP_ARCHIVE_NAME
-	 
+     $REST_ENDPOINT/$STORAGE_CONTAINER/$APP_ARCHIVE_NAME
+
 echo "archive: " $APP_ARCHIVE_NAME "のアップロードが正常に終了しました。"
 
 #psm setup実行
@@ -78,8 +80,8 @@ accs_push_status=$JOB_STATUS_RUNNING
 while [ "$accs_push_status" == "$JOB_STATUS_RUNNING" ]
 do
     accs_push_status=$(psm accs operation-status -j $accs_push_jobid -of short | grep 'Status:' | awk '{print $2}')
-	echo .
-	sleep 10
+    echo .
+    sleep 10
 done
 
 if [ "$accs_push_status" == "$JOB_STATUS_SUCCEED" ]
